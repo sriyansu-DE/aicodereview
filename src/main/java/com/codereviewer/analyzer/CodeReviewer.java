@@ -1,6 +1,6 @@
 package com.codereviewer.analyzer;
 
-import com.codereviewer.model.CodeIssue;
+import com.codereviewer.model.codeIssue;
 import com.codereviewer.model.ReviewResult;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -50,7 +50,7 @@ public class CodeReviewer {
 
         for (CodeAnalyzer analyzer : analyzers) {
 
-            List<CodeIssue> issues =
+            List<codeIssue> issues =
                     analyzer.analyze(cu);
 
             issues.forEach(result::addIssue);
