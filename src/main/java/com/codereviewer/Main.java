@@ -1,3 +1,5 @@
+package com.codereviewer;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
