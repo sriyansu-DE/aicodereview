@@ -7,7 +7,7 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SystemOutAnalyser implements CodeAnalyzer {
+public class SystemOutAnalyzer implements CodeAnalyzer {
   @Override 
 
   public List<codeIssue> analyze(CompilationUnit cu){
