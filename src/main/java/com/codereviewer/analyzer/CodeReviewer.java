@@ -19,7 +19,7 @@ public class CodeReviewer {
 
             new TodoAnalyzer(),
 
-            new LongLineAnalyzer(),
+            new LongClassAnalyzer(),
 
             new LongMethodAnalyzer(),
 
