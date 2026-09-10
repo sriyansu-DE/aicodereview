@@ -1,61 +1,55 @@
 package com.codereviewer.analyzer;
 
-import com.codereviewer.model.codeIssue;
+import java.util.List;
+
 import com.codereviewer.model.ReviewResult;
+import com.codereviewer.model.codeIssue;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 
-import java.util.List;
-
 public class CodeReviewer {
 
-    private final List<CodeAnalyzer> analyzers = List.of(
+    private final List<CodeAnalyzer> analyzers;
 
-            new SystemOutAnalyzer(),
+    public CodeReviewer() {
+        this.analyzers = List.of(
+                new SystemOutAnalyzer(),
+                new EmptyCatchAnalyzer(),
+                new GenericCatchAnalyzer(),
+                new TodoAnalyzer(),
+                new LongClassAnalyzer(),
+                new LongMethodAnalyzer(),
+                new DeepNestingAnalyzer(),
+                new TooManyArgumentsAnalyzer(),
+                new EmptyMethodAnalyzer(),
+                new MagicNumberAnalyzer(),
+                new HardcodedSecretAnalyzer(),
+                new SqlInjectionAnalyzer(),
+                new ComplexityAnalyzer()
+        );
+    }
 
-            new EmptyCatchAnalyzer(),
+    public ReviewResult review(String sourceCode, String fileName) {
+        ReviewResult result = new ReviewResult(fileName);
 
-            new GenericCatchAnalyzer(),
+        try {
+            CompilationUnit cu = StaticJavaParser.parse(sourceCode);
 
-            new TodoAnalyzer(),
-
-            new LongClassAnalyzer(),
-
-            new LongMethodAnalyzer(),
-
-            new DeepNestingAnalyzer(),
-
-            new TooManyArgumentsAnalyzer(),
-
-            new EmptyMethodAnalyzer(),
-
-            new MagicNumberAnalyzer(),
-
-            new HardcodedSecretAnalyzer(),
-
-            new SqlInjectionAnalyzer(),
-
-            new ComplexityAnalyzer()
-    );
-
-    public ReviewResult review(
-            String sourceCode,
-            String fileName) {
-
-        CompilationUnit cu =
-                StaticJavaParser.parse(sourceCode);
-
-        ReviewResult result =
-                new ReviewResult(fileName);
-
-        for (CodeAnalyzer analyzer : analyzers) {
-
-            List<codeIssue> issues =
-                    analyzer.analyze(cu);
-
-            issues.forEach(result::addIssue);
+            for (CodeAnalyzer analyzer : analyzers) {
+                List<codeIssue> issues = analyzer.analyze(cu);
+                if (issues != null) {
+                    issues.forEach(result::addIssue);
+                }
+            }
+        } catch (ParseProblemException e) {
+            throw e;
         }
 
         return result;
+    }
+
+    public List<CodeAnalyzer> getAnalyzers() {
+        return analyzers;
     }
 }
